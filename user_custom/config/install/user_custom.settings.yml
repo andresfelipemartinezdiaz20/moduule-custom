@@ -1,0 +1,4 @@
+nombre_completo_label: 'Full Name'
+correo_label: 'Email'
+dni_label: 'DNI'
+fecha_nacimiento_label: 'Birth Date'

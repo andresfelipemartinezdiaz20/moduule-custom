@@ -1,0 +1,53 @@
+<?php
+
+/**
+ * Implementation of hook_schema() to create the `user_registry` table.
+ */
+function user_custom_schema() {
+  $schema['user_registry'] = array(
+    'description' => 'Custom table to store registered user information.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Unique ID for each record',
+        'type' => 'serial', // Auto-incrementing type
+        'not null' => TRUE,
+      ),
+      'full_name' => array(
+        'description' => 'Full name of the user',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'email' => array(
+        'description' => 'Unique email address of the user',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'unique' => TRUE, // Ensures the email is unique
+      ),
+      'dni' => array(
+        'description' => 'Unique DNI number of the user',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'unique' => TRUE, // Ensures the DNI is unique
+      ),
+      'birth_date' => array(
+        'description' => 'Birth date of the user',
+        'type' => 'datetime',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install() to create the table upon module installation.
+ */
+function user_custom_install() {
+  // Create the table according to the defined schema.
+  drupal_install_schema('user_custom');
+}

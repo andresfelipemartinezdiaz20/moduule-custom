@@ -1,0 +1,8 @@
+name: 'Custom User'
+type: module
+description: 'Module to register users with a custom form and configurable labels.'
+core_version_requirement: ^10
+package: Custom
+dependencies:
+  - drupal:user
+  - drupal:config

@@ -1,0 +1,118 @@
+<?php
+
+/**
+ * @file
+ * Contains functions and hooks for the 'user_custom' module.
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function user_custom_help($route_name) {
+    switch ($route_name) {
+      case 'help.page.user_custom':
+        // Module description on the help page.
+        return t('Module to register users with a custom form and configurable labels.');
+    }
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function user_custom_theme() {
+    return [
+      'user_custom_form' => [
+        'render element' => 'form',
+      ],
+    ];
+}
+
+/**
+ * Implementation of hook_menu() to define the routes and pages of the module.
+ */
+function user_custom_menu() {
+    $items = [];
+  
+    // Route to display the registration form.
+    $items['user-custom/registration'] = [
+      'title' => 'User Registration',
+      'page callback' => 'user_custom_form_page',
+      'page arguments' => [],
+      'access callback' => 'TRUE',
+      'type' => MENU_CALLBACK,
+    ];
+  
+    // Route for the page displaying registered users.
+    $items['user-custom/users'] = [
+      'title' => 'Registered Users',
+      'page callback' => 'user_custom_list_users',
+      'page arguments' => [],
+      'access callback' => 'TRUE',
+      'type' => MENU_CALLBACK,
+    ];
+  
+    return $items;
+}
+
+/**
+ * Function to display the user registration form.
+ */
+function user_custom_form_page() {
+    $output = drupal_get_form('user_custom_form');
+    return $output;
+}
+
+/**
+ * Function that generates the user registration form.
+ */
+function user_custom_form($form, &$form_state) {
+    // Define form fields
+    $form['name'] = [
+      '#type' => 'textfield',
+      '#title' => t('Name'),
+      '#required' => TRUE,
+    ];
+  
+    $form['email'] = [
+      '#type' => 'email',
+      '#title' => t('Email Address'),
+      '#required' => TRUE,
+    ];
+  
+    $form['submit'] = [
+      '#type' => 'submit',
+      '#value' => t('Register User'),
+    ];
+  
+    // Set the template to be used for rendering the form
+    $form['#theme'] = 'user_custom_form'; // Here we specify the name of the Twig template
+  
+    return $form;
+}
+
+/**
+ * Function to handle the submission of the user registration form.
+ */
+function user_custom_form_submit($form, &$form_state) {
+    $name = $form_state['values']['name'];
+    $email = $form_state['values']['email'];
+  
+    // Logic to save the user in the database or configuration.
+    drupal_set_message(t('User registered: @name', ['@name' => $name]));
+}
+
+/**
+ * Function to display the list of registered users.
+ */
+function user_custom_list_users() {
+    // Here you can add logic to query and display the registered users.
+    // For example, you could use a query to retrieve users from the database.
+  
+    $users = user_load_multiple();
+    $output = '<h2>' . t('Registered Users') . '</h2>';
+    foreach ($users as $user) {
+      $output .= '<p>' . $user->name . ' (' . $user->mail . ')</p>';
+    }
+  
+    return $output;
+}
